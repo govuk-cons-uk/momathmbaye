@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your immigration status (eVisa)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px; /* Espace sur les bords pour mobile */
+        }
+
+        /* Barre supérieure responsive */
+        .gov-header {
+            width: 100%;
+            max-width: 800px;
+            background-color: #1d5a95;
+            color: white;
+            padding: 15px 25px;
+            font-weight: bold;
+            font-size: 20px;
+            border-radius: 8px 8px 0 0;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 20px; /* Réduit pour mobile */
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Section Profil Responsive */
+        .profile-card {
+            display: flex;
+            flex-direction: column; /* Colonne par défaut (Mobile) */
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #e1e4e8;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        @media (min-width: 600px) {
+            .profile-card {
+                flex-direction: row; /* Ligne sur PC */
+                text-align: left;
+            }
+            .main-container { padding: 30px; }
+        }
+
+        .photo-container {
+            position: relative;
+            width: 120px;
+            min-width: 120px; /* Empêche le rétrécissement */
+            height: 150px;
+            background-color: #eee; /* Fond de secours */
+            border-radius: 8px;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: block; /* Important pour l'affichage mobile */
+        }
+
+        .evisa-tag {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(255,255,255,0.8);
+            font-size: 10px;
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+        }
+
+        .profile-details h2 {
+            margin: 0 0 15px 0;
+            font-size: 20px;
+            color: #0b0c0c;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap; /* Les badges reviennent à la ligne si besoin */
+            justify-content: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        @media (min-width: 600px) {
+            .badges { justify-content: flex-start; }
+            .profile-details h2 { font-size: 24px; }
+        }
+
+        .badge-item {
+            background: #f3f8ff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #d0e3ff;
+            white-space: nowrap; /* Garde le texte sur une ligne dans le badge */
+        }
+
+        .status-active {
+            background: #00854d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        /* Alerte Verte Responsive */
+        .success-alert {
+            background-color: #dfefe1;
+            border: 1px solid #badbcc;
+            border-radius: 15px; /* Plus carré sur mobile */
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #005a32;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 600px) {
+            .success-alert { border-radius: 50px; font-size: 18px; }
+        }
+
+        .check-icon {
+            width: 28px;
+            height: 28px;
+            background-color: #00854d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .check-icon::after {
+            content: '';
+            width: 6px;
+            height: 11px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+
+        /* Tableau Responsive */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table tr { border-bottom: 1px solid #edf0f3; }
+
+        .data-table td {
+            padding: 12px 5px;
+            font-size: 14px;
+        }
+
+        .label {
+            color: #1d70b8;
+            font-weight: 500;
+            width: 45%;
+        }
+
+        .value {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .footer-action {
+            width: 100%;
+            max-width: 800px;
+            background-color: #1d5a95;
+            padding: 15px;
+            border-radius: 0 0 8px 8px;
+            box-sizing: border-box;
+        }
+
+        .btn-home {
+            background-color: #4a86bd;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .copyright {
+            font-size: 11px;
+            color: #666;
+            margin: 15px 0;
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        @keyframes borderGlow {
+            0% { box-shadow: 0 0 10px #1d70b8; }
+            50% { box-shadow: 0 0 20px #00854d; }
+            100% { box-shadow: 0 0 10px #1d70b8; }
+        }
+
+        .photo-container img:hover {
+            animation: borderGlow 1.5s infinite;
+            border-color: #1d70b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gov-header">GOV.UK</div>
+
+    <div class="main-container">
+        <div class="profile-card">
+            <div class="photo-container">
+                <img src="IMGSEN1.jpg" alt="Photo de profil">
+                <div class="evisa-tag">E-VISA</div>
+            </div>
+            <div class="profile-details">
+                <h2>DIONGUE ABDOU KHADRE</h2>
+                <div class="badges">
+                    <span class="badge-item"><strong style="color:#1d70b8">Born:</strong> 01 Feb 2001</span>
+                    <span class="badge-item"><strong style="color:#1d70b8">Nationality:</strong> SEN</span>
+                    <span class="badge-item"><strong style="color:#1d70b8">Status:</strong> Skilled <span class="status-active">Active</span></span>
+                </div>
+            </div>
+        </div>
+
+        <h1 style="font-size: 22px; margin-bottom: 5px;">Your immigration status (eVisa)</h1>
+        <p style="color: #666; margin-bottom: 25px; font-size: 14px;">Digital proof of your UK immigration status</p>
+
+        <div class="success-alert">
+            <div class="check-icon"></div>
+            <span>Your eVisa is valid and can be used to prove your statut in the UK</span>
+        </div>
+
+        <table class="data-table">
+            <tr><td class="label">Name</td><td class="value">DIONGUE ABDOU KHADRE</td></tr>
+            <tr><td class="label">Date of birth</td><td class="value">01 Feb 2001</td></tr>
+            <tr><td class="label">Nationality</td><td class="value">SEN (Senegal)</td></tr>
+            <tr><td class="label">Status</td><td class="value">Skilled Worker</td></tr>
+            <tr><td class="label">Sponsor licence</td><td class="value">CHTO98H09</td></tr>
+            <tr><td class="label">Valid from</td><td class="value">08 April 2026</td></tr>
+            <tr><td class="label">Valid until</td><td class="value">07 April 2028</td></tr>
+        </table>
+    </div>
+
+    <div class="footer-action">
+        <a href="https://www.gov.uk/evisa" style="text-decoration: none;">
+            <button class="btn-home">Home</button>
+        </a>
+    </div>
+
+    <div class="copyright">© UK Visas and Immigration</div>
+
+</body>
+</html>
